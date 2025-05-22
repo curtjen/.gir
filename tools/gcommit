@@ -1,0 +1,8 @@
+#!/bin/bash
+
+branch=$(git describe --contains --all HEAD)
+comment+="$branch: "
+comment+=$@
+timestamp=$(date)
+originurl=$(git config --get remote.origin.url)
+git commit -m "$comment" && echo "|$timestamp|$originurl|$comment|" >> ~/.commit_log

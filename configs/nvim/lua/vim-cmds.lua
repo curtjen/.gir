@@ -27,4 +27,9 @@ vim.cmd("tab all")           -- Show tabs for all files opened at once
 -- Fix copy and paste
 vim.cmd("set mouse=a")
 vim.cmd("autocmd TextYankPost * if v:event['operator'] is 'y' && v:event['regname'] is '' | let @+ = @0 | endif")
+vim.keymap.set('n', '<leader>gp', ':let @" = expand("%:p")', {})
+
+-- Undo History
+vim.cmd("set undofile")
+vim.cmd("set undodir=~/.local/share/nvim/undo")
 

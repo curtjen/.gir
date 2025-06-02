@@ -10,7 +10,7 @@ check_for_homebrew() {
       red_echo "Homebrew not found. Installing Homebrew..."
     else
       green_echo "Homebrew is installed!"
-      exit 0
+      # exit 0
     fi
   else
     red_echo "Homebrew is not supported on this OS."

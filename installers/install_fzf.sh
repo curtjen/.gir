@@ -9,20 +9,20 @@ source "$SCRIPT_DIR/../utils/helpers.sh"
 
 _install() {
   local commands=(
-    "mac:brew install ripgrep"
-    "arch:sudo pacman -S ripgrep --noconfirm"
-    "debian:sudo apt-get install ripgrep -y"
+    "mac:brew install fzf"
+    "arch:sudo pacman -S fzf --noconfirm"
+    "debian:sudo apt install fzf -y"
   )
 
   _action() {
     run_install "${commands[@]}"
   }
-  do_action _action "Install ripgrep"
+  do_action _action "Install FZF"
 }
 
 main() {
   divider
-  title_echo "Installing ripgrep..."
+  title_echo "Installing FZF..."
   _install 
   success_echo "Done!"
 }

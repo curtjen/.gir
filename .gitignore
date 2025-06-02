@@ -1,6 +1,9 @@
 # Custom Stuff #
 #####################
 omz_customizations/themes/powerlevel10k
+**/_backups/
+fonts
+**/powerlevel10k
 
 # Compiled source #
 ###################

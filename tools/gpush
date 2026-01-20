@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+branch=$(git describe --contains --all HEAD);
+git push origin $branch;

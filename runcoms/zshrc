@@ -12,7 +12,7 @@ fi
 [[ ! -f $HOME/.p10k.zsh ]] || source $HOME/.p10k.zsh
 
 # Path to your oh-my-zsh installation.
-# export ZSH=$HOME/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set CLICOLOR if you want Ansi Colors in iTerm2
 export CLICOLOR=1
@@ -27,7 +27,7 @@ export TERM=xterm-256color
 # ZSH_CUSTOM=$HOME/.gir/runcoms/omz_customizations/
 
 # ZSH_THEME="cletus_one"
-# ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
@@ -59,10 +59,15 @@ alias mvimback='mv ~/.vimrc-git-committing ~/.vimrc' # Move vim config back
 #alias gitm='branch=$(git describe --contains --all HEAD); git checkout master; git fetch; git pull origin master; git checkout $branch; git merge master;'
 alias code='open -a Visual\ Studio\ Code'
 # alias mvnode='~/.gir/scripts/mv_node_modules.sh'
+alias zed='open -a Zed'
 
 # Machine specific aliases, settings, and environment variables
 if [ -f $HOME/.aliases_local ]; then
     source $HOME/.aliases_local
+fi
+
+if [ -f $HOME/.gir/runcoms/command_log.zsh ]; then
+    source $HOME/.gir/runcoms/command_log.zsh
 fi
 
 # NVM
@@ -114,14 +119,17 @@ bindkey "^[m" copy-earlier-word
 
 export PATH="$PATH:$HOME/.gir/tools"
 
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /home/docker/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /home/docker/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /home/docker/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
-source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /home/docker/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /home/docker/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /home/docker/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+# source /Users/curtisjensen/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+source $HOME/.gir/runcoms/themes/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

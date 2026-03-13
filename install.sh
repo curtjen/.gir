@@ -12,7 +12,7 @@ set -euo pipefail
 #   npx degit curtjen/.gir#v2 ~/.rcs && ~/.rcs/install.sh
 #
 #   # After cloning manually:
-#   git clone -b v2 git@github.com:curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
+#   git clone -b v2 https://github.com/curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
 #
 #   # Install specific modules only:
 #   ~/.rcs/install.sh zsh vim nvm
@@ -20,7 +20,7 @@ set -euo pipefail
 # =============================================================================
 
 # --- Config ------------------------------------------------------------------
-RCS_REPO="${RCS_REPO:-git@github.com:curtjen/.gir.git}"
+RCS_REPO="${RCS_REPO:-https://github.com/curtjen/.gir.git}"
 RCS_DIR="${RCS_DIR:-$HOME/.rcs}"
 
 # --- Bootstrap (curl-pipe detection) ----------------------------------------

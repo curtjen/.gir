@@ -12,7 +12,7 @@ curl -fsSL https://raw.githubusercontent.com/curtjen/.gir/v2/install.sh | bash
 npx degit curtjen/.gir#v2 ~/.rcs && ~/.rcs/install.sh
 
 # Manual
-git clone -b v2 git@github.com:curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
+git clone -b v2 https://github.com/curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
 ```
 
 ## Selective install

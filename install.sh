@@ -6,13 +6,13 @@ set -euo pipefail
 #
 # Usage:
 #   # Via curl (bootstraps from scratch):
-#   curl -fsSL https://raw.githubusercontent.com/GITHUB_USER/rcs/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/curtjen/.gir/v2/install.sh | bash
 #
 #   # Via npx (no git history):
-#   npx degit GITHUB_USER/rcs ~/.rcs && ~/.rcs/install.sh
+#   npx degit curtjen/.gir#v2 ~/.rcs && ~/.rcs/install.sh
 #
 #   # After cloning manually:
-#   git clone https://github.com/GITHUB_USER/rcs.git ~/.rcs && ~/.rcs/install.sh
+#   git clone -b v2 git@github.com:curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
 #
 #   # Install specific modules only:
 #   ~/.rcs/install.sh zsh vim nvm
@@ -20,8 +20,7 @@ set -euo pipefail
 # =============================================================================
 
 # --- Config ------------------------------------------------------------------
-# TODO: Set this to your actual GitHub repo URL before publishing.
-RCS_REPO="${RCS_REPO:-https://github.com/GITHUB_USER/rcs.git}"
+RCS_REPO="${RCS_REPO:-git@github.com:curtjen/.gir.git}"
 RCS_DIR="${RCS_DIR:-$HOME/.rcs}"
 
 # --- Bootstrap (curl-pipe detection) ----------------------------------------

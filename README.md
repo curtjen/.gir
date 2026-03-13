@@ -6,16 +6,14 @@ Modular dotfiles and tool setup for Mac, Linux, WSL, and SSH servers.
 
 ```bash
 # Via curl (clones repo to ~/.rcs then runs installer)
-curl -fsSL https://raw.githubusercontent.com/GITHUB_USER/rcs/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/curtjen/.gir/v2/install.sh | bash
 
 # Via npx (no git history)
-npx degit GITHUB_USER/rcs ~/.rcs && ~/.rcs/install.sh
+npx degit curtjen/.gir#v2 ~/.rcs && ~/.rcs/install.sh
 
 # Manual
-git clone https://github.com/GITHUB_USER/rcs.git ~/.rcs && ~/.rcs/install.sh
+git clone -b v2 git@github.com:curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
 ```
-
-> **Note:** Replace `GITHUB_USER` with your actual GitHub username before publishing.
 
 ## Selective install
 

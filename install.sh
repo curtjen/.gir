@@ -88,7 +88,9 @@ run_module() {
   fi
 
   log_header "Module: $MODULE_NAME — $MODULE_DESCRIPTION"
-  install_module
+  if ! install_module; then
+    log_error "Module '$MODULE_NAME' failed — skipping (other modules will continue)"
+  fi
 }
 
 # --- Determine which modules to run -----------------------------------------

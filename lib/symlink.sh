@@ -9,7 +9,7 @@
 #
 # Requires log.sh to be sourced first.
 
-RCS_BACKUP_DIR="${RCS_BACKUP_DIR:-$HOME/_rcs_backup}"
+RCS_BACKUP_DIR="${RCS_BACKUP_DIR:-$HOME/_gir_backup}"
 
 rcs_link() {
   local src="$1"

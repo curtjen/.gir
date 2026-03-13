@@ -5,14 +5,14 @@ Modular dotfiles and tool setup for Mac, Linux, WSL, and SSH servers.
 ## Quick install
 
 ```bash
-# Via curl (clones repo to ~/.rcs then runs installer)
+# Via curl (clones repo to ~/.gir then runs installer)
 curl -fsSL https://raw.githubusercontent.com/curtjen/.gir/v2/install.sh | bash
 
 # Via npx (no git history)
-npx degit curtjen/.gir#v2 ~/.rcs && ~/.rcs/install.sh
+npx degit curtjen/.gir#v2 ~/.gir && ~/.gir/install.sh
 
 # Manual
-git clone -b v2 https://github.com/curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
+git clone -b v2 https://github.com/curtjen/.gir.git ~/.gir && ~/.gir/install.sh
 ```
 
 ## Selective install
@@ -20,14 +20,14 @@ git clone -b v2 https://github.com/curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
 Install specific modules only:
 
 ```bash
-~/.rcs/install.sh zsh vim nvm
+~/.gir/install.sh zsh vim nvm
 ```
 
 ## How it works
 
 - Each tool lives in `modules/<name>/install.sh`
 - `install.sh` discovers and runs all modules automatically
-- Existing dotfiles are **backed up** to `~/_rcs_backup/<timestamp>/` before being replaced with symlinks
+- Existing dotfiles are **backed up** to `~/_gir_backup/<timestamp>/` before being replaced with symlinks
 - Modules declare which platforms they support — GUI-only tools are skipped on SSH servers
 
 ## Modules
@@ -61,7 +61,7 @@ install_module() {
 ```
 
 2. Add any dotfiles alongside it (e.g., `modules/mytool/mytoolrc`)
-3. Run `~/.rcs/install.sh mytool` to test it
+3. Run `~/.gir/install.sh mytool` to test it
 
 ## Repo layout
 

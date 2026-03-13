@@ -28,5 +28,5 @@ install_module() {
   # --- Symlinks ---
   rcs_link "$RCS_DIR/modules/zsh/zshrc"              "$HOME/.zshrc"
   rcs_link "$RCS_DIR/modules/zsh/p10k.zsh"           "$HOME/.p10k.zsh"
-  rcs_link "$RCS_DIR/modules/zsh/omz_customizations" "$HOME/.rcs/omz_customizations"
+  rcs_link "$RCS_DIR/modules/zsh/omz_customizations" "$HOME/.gir/omz_customizations"
 }

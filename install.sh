@@ -9,27 +9,27 @@ set -euo pipefail
 #   curl -fsSL https://raw.githubusercontent.com/curtjen/.gir/v2/install.sh | bash
 #
 #   # Via npx (no git history):
-#   npx degit curtjen/.gir#v2 ~/.rcs && ~/.rcs/install.sh
+#   npx degit curtjen/.gir#v2 ~/.gir && ~/.gir/install.sh
 #
 #   # After cloning manually:
-#   git clone -b v2 https://github.com/curtjen/.gir.git ~/.rcs && ~/.rcs/install.sh
+#   git clone -b v2 https://github.com/curtjen/.gir.git ~/.gir && ~/.gir/install.sh
 #
 #   # Install specific modules only:
-#   ~/.rcs/install.sh zsh vim nvm
+#   ~/.gir/install.sh zsh vim nvm
 #
 # =============================================================================
 
 # --- Config ------------------------------------------------------------------
-RCS_REPO="${RCS_REPO:-https://github.com/curtjen/.gir.git}"
-RCS_DIR="${RCS_DIR:-$HOME/.rcs}"
+RCS_REPO="${RCS_REPO:-https://github.com/curtjen/.gir}"
+RCS_DIR="${RCS_DIR:-$HOME/.gir}"
 
 # --- Bootstrap (curl-pipe detection) ----------------------------------------
 # When piped through bash (curl ... | bash), BASH_SOURCE[0] is not a file.
 # In that case, clone the repo and re-exec the real install.sh.
 if [[ ! -f "${BASH_SOURCE[0]:-}" ]]; then
-  echo "[rcs] Running via curl — cloning repo to $RCS_DIR..."
+  echo "[gir] Running via curl — cloning repo to $RCS_DIR..."
   if [[ -d "$RCS_DIR" ]]; then
-    echo "[rcs] $RCS_DIR already exists. Pulling latest..."
+    echo "[gir] $RCS_DIR already exists. Pulling latest..."
     git -C "$RCS_DIR" pull --ff-only
   else
     git clone "$RCS_REPO" "$RCS_DIR"

@@ -123,3 +123,17 @@ done
 
 log_header "Done!"
 echo ""
+
+# --- Reload shell ---
+if command -v zsh &>/dev/null; then
+  if [[ -t 0 ]]; then
+    log_info "Launching zsh..."
+    exec zsh
+  else
+    log_info "Installation complete. To apply your new config run:"
+    echo "  exec zsh        # replace current shell with zsh"
+    echo "  source ~/.zshrc # reload config in the current shell"
+  fi
+else
+  log_warn "zsh not found — install it then run: exec zsh"
+fi

@@ -1,6 +1,11 @@
-# Custom Stuff #
-#####################
-omz_customizations/themes/powerlevel10k
+# rcs — module-generated / downloaded content (not tracked)
+###########################################################
+modules/zsh/omz_customizations/themes/powerlevel10k
+modules/vim/vim/.backup
+modules/vim/vim/.swp
+modules/vim/vim/.undo
+modules/vim/vim/view
+modules/vim/vim/bundle
 
 # Compiled source #
 ###################

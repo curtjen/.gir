@@ -1,9 +1,0 @@
-#!/bin/bash
-
-#branch=$(git describe --contains --all HEAD);
-branch=$(git rev-parse --abbrev-ref HEAD);
-git pull origin $branch;
-#git checkout main || git checkout master;
-#git pull;
-#git checkout $branch;
-#git merge master;

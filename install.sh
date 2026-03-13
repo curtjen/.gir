@@ -127,7 +127,7 @@ echo ""
 # --- Reload shell ---
 if command -v zsh &>/dev/null; then
   log_info "Launching zsh..."
-  exec zsh
+  source ~/.zshrc
 else
   log_warn "zsh not found. Install it, then run one of:"
   echo "  exec zsh        # replace current shell with zsh"

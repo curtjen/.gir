@@ -4,23 +4,31 @@ MODULE_NAME="neovim"
 MODULE_DESCRIPTION="Neovim + config"
 MODULE_PLATFORMS="all"
 
+_pkg_install() {
+  local pkg="$1"
+  if [[ "$IS_MACOS" == true ]]; then
+    brew install "$pkg"
+  elif command -v apt-get &>/dev/null; then
+    sudo apt-get install -y "$pkg"
+  elif command -v dnf &>/dev/null; then
+    sudo dnf install -y "$pkg"
+  else
+    log_warn "Unknown package manager — install $pkg manually"
+    return 1
+  fi
+}
+
 install_module() {
   # --- Install neovim ---
   if command -v nvim &>/dev/null; then
     log_skip "neovim already installed ($(nvim --version | head -1))"
   else
     log_info "Installing neovim..."
-    if [[ "$IS_MACOS" == true ]]; then
-      brew install neovim
-    elif command -v apt-get &>/dev/null; then
-      sudo apt-get install -y neovim
-    elif command -v dnf &>/dev/null; then
-      sudo dnf install -y neovim
+    if _pkg_install neovim; then
+      log_ok "neovim installed"
     else
-      log_warn "Unknown package manager — install neovim manually"
-      return 1
+      log_warn "Skipping neovim install — continue with remaining steps"
     fi
-    log_ok "neovim installed"
   fi
 
   # --- Install ripgrep (used by neovim plugins) ---
@@ -28,16 +36,11 @@ install_module() {
     log_skip "ripgrep already installed"
   else
     log_info "Installing ripgrep..."
-    if [[ "$IS_MACOS" == true ]]; then
-      brew install ripgrep
-    elif command -v apt-get &>/dev/null; then
-      sudo apt-get install -y ripgrep
-    elif command -v dnf &>/dev/null; then
-      sudo dnf install -y ripgrep
+    if _pkg_install ripgrep; then
+      log_ok "ripgrep installed"
     else
-      log_warn "Unknown package manager — install ripgrep manually"
+      log_warn "Skipping ripgrep install"
     fi
-    log_ok "ripgrep installed"
   fi
 
   # --- Symlink config ---

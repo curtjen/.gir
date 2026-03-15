@@ -1,6 +1,8 @@
-# rcs — dotfiles & tool installer
+# gir — dotfiles & tool installer
 
 Modular dotfiles and tool setup for Mac, Linux, WSL, and SSH servers.
+
+`gir` is named after GIR from *Invader Zim*, the robot assistant.
 
 ## Quick install
 
@@ -32,16 +34,19 @@ Install specific modules only:
 
 ## Modules
 
-| Module      | Platforms         | What it does                               |
-|-------------|-------------------|--------------------------------------------|
-| `zsh`       | all               | Zsh + Oh My Zsh + Powerlevel10k            |
-| `vim`       | all               | Vim + Vundle plugins                       |
-| `bash`      | all               | Bash config                                |
-| `nvm`       | all               | Node Version Manager + LTS Node            |
-| `neovim`    | all               | Neovim + ripgrep                           |
-| `homebrew`  | macOS             | Homebrew + Brewfile packages               |
-| `wezterm`   | macOS, no SSH     | WezTerm terminal + config                  |
-| `aerospace` | macOS, no SSH     | AeroSpace tiling window manager            |
+| Module           | Platforms     | What it does                               |
+|------------------|---------------|--------------------------------------------|
+| `zsh`            | all           | Zsh + Oh My Zsh + Powerlevel10k            |
+| `vim`            | all           | Vim + Vundle plugins                       |
+| `bash`           | all           | Bash config                                |
+| `fzf`            | all           | Fuzzy finder for the terminal              |
+| `nvm`            | all           | Node Version Manager + LTS Node            |
+| `neovim`         | all           | Neovim + ripgrep                           |
+| `claude-skills`  | all           | Symlink repo skills into `~/.claude/skills`|
+| `codex-skills`   | all           | Sync Claude skills into Codex skills       |
+| `homebrew`       | macOS         | Homebrew + Brewfile packages               |
+| `wezterm`        | macOS, no SSH | WezTerm terminal + config                  |
+| `aerospace`      | macOS, no SSH | AeroSpace tiling window manager            |
 
 ## Adding a new module
 
@@ -63,10 +68,36 @@ install_module() {
 2. Add any dotfiles alongside it (e.g., `modules/mytool/mytoolrc`)
 3. Run `~/.gir/install.sh mytool` to test it
 
+## codex-skills module
+
+The `codex-skills` module syncs skill directories from `~/.claude/skills` into
+`~/.agents/skills` as symlinks.
+
+Run via the installer:
+
+```bash
+~/.gir/install.sh codex-skills
+```
+
+Run the helper directly for additional options:
+
+```bash
+~/.gir/modules/codex-skills/sync-claude-skills-to-codex.sh --dry-run
+~/.gir/modules/codex-skills/sync-claude-skills-to-codex.sh --clean-stale
+```
+
+Environment overrides:
+
+```bash
+CLAUDE_SKILLS_DIR=/custom/claude/skills \
+CODEX_SKILLS_DIR=/custom/codex/skills \
+~/.gir/modules/codex-skills/sync-claude-skills-to-codex.sh
+```
+
 ## Repo layout
 
 ```
-rcs/
+gir/
 ├── install.sh              # Bootstrap entry point (curl-able)
 ├── Brewfile                # macOS Homebrew packages
 ├── lib/
@@ -77,8 +108,11 @@ rcs/
     ├── zsh/                # zshrc, p10k.zsh, omz_customizations/
     ├── vim/                # vimrc, vim/
     ├── bash/               # bashrc
+    ├── fzf/
     ├── nvm/
     ├── neovim/             # config/ (add your init.lua here)
+    ├── claude-skills/
+    ├── codex-skills/
     ├── homebrew/
     ├── wezterm/            # wezterm.lua
     └── aerospace/          # aerospace.toml (add your config here)

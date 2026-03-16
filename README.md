@@ -46,7 +46,6 @@ Install specific modules only:
 | `codex-skills`   | all           | Sync Claude skills into Codex skills       |
 | `homebrew`       | macOS         | Homebrew + Brewfile packages               |
 | `wezterm`        | macOS, no SSH | WezTerm terminal + config                  |
-| `aerospace`      | macOS, no SSH | AeroSpace tiling window manager            |
 
 ## Adding a new module
 
@@ -115,5 +114,5 @@ gir/
     ├── codex-skills/
     ├── homebrew/
     ├── wezterm/            # wezterm.lua
-    └── aerospace/          # aerospace.toml (add your config here)
+    └── wezterm/
 ```

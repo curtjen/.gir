@@ -17,11 +17,27 @@ set -euo pipefail
 #   # Install specific modules only:
 #   ~/.gir/install.sh zsh vim nvm
 #
+#   # Dry run (show what would happen, make no changes):
+#   ~/.gir/install.sh --dry-run
+#   ~/.gir/install.sh --dry-run zsh vim nvm
+#
 # =============================================================================
 
 # --- Config ------------------------------------------------------------------
 RCS_REPO="${RCS_REPO:-https://github.com/curtjen/.gir}"
 RCS_DIR="${RCS_DIR:-$HOME/.gir}"
+DRY_RUN=false
+
+# --- Flags -------------------------------------------------------------------
+PASSTHROUGH_ARGS=()
+for arg in "$@"; do
+  case "$arg" in
+    --dry-run) DRY_RUN=true ;;
+    *) PASSTHROUGH_ARGS+=("$arg") ;;
+  esac
+done
+set -- "${PASSTHROUGH_ARGS[@]+"${PASSTHROUGH_ARGS[@]}"}"
+export DRY_RUN
 
 # --- Bootstrap (curl-pipe detection) ----------------------------------------
 # When piped through bash (curl ... | bash), BASH_SOURCE[0] is not a file.
@@ -48,6 +64,7 @@ source "$RCS_DIR/lib/symlink.sh"
 # --- Platform summary --------------------------------------------------------
 log_header "rcs installer"
 log_info "Installing to: $RCS_DIR"
+[[ "$DRY_RUN" == true ]] && log_warn "Dry run — no changes will be made"
 detect_summary
 
 # --- Module runner -----------------------------------------------------------
@@ -88,6 +105,10 @@ run_module() {
   fi
 
   log_header "Module: $MODULE_NAME — $MODULE_DESCRIPTION"
+  if [[ "$DRY_RUN" == true ]]; then
+    log_info "[dry run] Would run: $MODULE_NAME"
+    return 0
+  fi
   if ! install_module; then
     log_error "Module '$MODULE_NAME' failed — skipping (other modules will continue)"
   fi

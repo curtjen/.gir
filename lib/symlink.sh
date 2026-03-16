@@ -26,6 +26,14 @@ rcs_link() {
     return 0
   fi
 
+  if [[ "${DRY_RUN:-false}" == true ]]; then
+    if [[ -e "$target" ]] || [[ -L "$target" ]]; then
+      log_info "[dry run] Would back up: $target → \$RCS_BACKUP_DIR/<ts>/$(basename "$target")"
+    fi
+    log_info "[dry run] Would link: $target → $src"
+    return 0
+  fi
+
   # Existing file, dir, or wrong symlink — back it up
   if [[ -e "$target" ]] || [[ -L "$target" ]]; then
     local ts

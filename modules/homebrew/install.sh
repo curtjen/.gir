@@ -15,7 +15,7 @@ install_module() {
   fi
 
   # --- Install Brewfile packages ---
-  local brewfile="$RCS_DIR/Brewfile"
+  local brewfile="$module_dir/Brewfile"
   if [[ -f "$brewfile" ]]; then
     log_info "Installing Brewfile packages..."
     brew bundle --file="$brewfile"

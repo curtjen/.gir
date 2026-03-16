@@ -1,0 +1,5 @@
+brew "fzf"
+brew "watchman"
+brew "neovim"
+brew "maccy"
+cask "rectangle"

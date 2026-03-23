@@ -1,0 +1,220 @@
+#!/bin/bash
+set -euo pipefail
+
+resolve_script_dir() {
+  local source="${BASH_SOURCE[0]}"
+  while [[ -L "$source" ]]; do
+    local dir
+    dir="$(cd -P "$(dirname "$source")" && pwd)"
+    source="$(readlink "$source")"
+    [[ "$source" != /* ]] && source="$dir/$source"
+  done
+  cd -P "$(dirname "$source")" && pwd
+}
+
+SCRIPT_DIR="$(resolve_script_dir)"
+HELPER="$SCRIPT_DIR/routine-config-helper.js"
+CONFIG_PATH="${MORNING_ROUTINE_CONFIG:-$HOME/.morning-routine.json}"
+GIR_DIR="${GIR_DIR:-$HOME/.gir}"
+
+log() {
+  printf '[morning-routine] %s\n' "$1"
+}
+
+warn() {
+  printf '[morning-routine] WARN: %s\n' "$1"
+}
+
+require_helper() {
+  if ! command -v node >/dev/null 2>&1; then
+    warn "node is required to read $CONFIG_PATH"
+    exit 1
+  fi
+
+  if [[ ! -f "$HELPER" ]]; then
+    warn "Helper not found at $HELPER"
+    exit 1
+  fi
+}
+
+helper() {
+  node "$HELPER" "$@"
+}
+
+check_gir_status() {
+  if ! command -v git >/dev/null 2>&1; then
+    warn "git is not installed; skipping gir update check"
+    return
+  fi
+
+  if [[ ! -d "$GIR_DIR/.git" ]]; then
+    warn "No gir git checkout found at $GIR_DIR"
+    return
+  fi
+
+  log "Checking gir status in $GIR_DIR"
+
+  if ! git -C "$GIR_DIR" fetch --quiet origin >/dev/null 2>&1; then
+    warn "Unable to fetch gir updates from origin"
+    return
+  fi
+
+  local upstream=""
+  upstream="$(git -C "$GIR_DIR" rev-parse --abbrev-ref --symbolic-full-name '@{upstream}' 2>/dev/null || true)"
+
+  if [[ -z "$upstream" ]]; then
+    warn "gir has no upstream tracking branch configured"
+  else
+    local ahead behind
+    read -r ahead behind < <(git -C "$GIR_DIR" rev-list --left-right --count HEAD..."$upstream")
+
+    if [[ "$ahead" -eq 0 && "$behind" -eq 0 ]]; then
+      log "gir is up to date with $upstream"
+    else
+      warn "gir differs from $upstream (ahead=$ahead, behind=$behind)"
+    fi
+  fi
+
+  if [[ -n "$(git -C "$GIR_DIR" status --porcelain)" ]]; then
+    warn "gir has uncommitted local changes"
+  fi
+}
+
+open_app() {
+  local app_name="$1"
+
+  if [[ "$OSTYPE" == darwin* ]]; then
+    open -a "$app_name" >/dev/null 2>&1 || warn "Failed to open app: $app_name"
+  else
+    warn "App launching is only implemented for macOS: $app_name"
+  fi
+}
+
+open_url() {
+  local url="$1"
+  local chrome_profile="$2"
+
+  if [[ "$OSTYPE" == darwin* ]]; then
+    if [[ -n "$chrome_profile" ]]; then
+      open -na "Google Chrome" --args --profile-directory="$chrome_profile" "$url" >/dev/null 2>&1 \
+        || warn "Failed to open URL in Chrome profile $chrome_profile: $url"
+    else
+      open "$url" >/dev/null 2>&1 || warn "Failed to open URL: $url"
+    fi
+  else
+    warn "URL opening is only implemented for macOS: $url"
+  fi
+}
+
+run_docker_service() {
+  local kind="$1"
+  local field_one="$2"
+  local field_two="${3:-}"
+
+  if ! command -v docker >/dev/null 2>&1; then
+    warn "docker is not installed; skipping configured docker services"
+    return
+  fi
+
+  if [[ "$kind" == "command" ]]; then
+    bash -lc "$field_one" || warn "Docker command failed: $field_one"
+    return
+  fi
+
+  local directory="$field_one"
+  local services_csv="$field_two"
+
+  if [[ ! -d "$directory" ]]; then
+    warn "Docker directory does not exist: $directory"
+    return
+  fi
+
+  local -a services=()
+  if [[ -n "$services_csv" ]]; then
+    IFS=',' read -r -a services <<< "$services_csv"
+  fi
+
+  if [[ ${#services[@]} -eq 0 ]]; then
+    (cd "$directory" && docker compose up -d) || warn "docker compose failed in $directory"
+  else
+    (cd "$directory" && docker compose up -d "${services[@]}") || warn "docker compose failed in $directory"
+  fi
+}
+
+schedule_action() {
+  local delay="$1"
+  local label="$2"
+  shift 2
+
+  if [[ "$delay" =~ ^[0-9]+$ ]] && [[ "$delay" -gt 0 ]]; then
+    log "Scheduling $label in ${delay}s"
+    (
+      sleep "$delay"
+      "$@"
+    ) &
+  else
+    log "Running $label"
+    "$@"
+  fi
+}
+
+show_state() {
+  local in_progress updated_at
+  in_progress="$(helper state-field "$CONFIG_PATH" in_progress)"
+  updated_at="$(helper state-field "$CONFIG_PATH" updated_at)"
+
+  if [[ -n "$in_progress" ]]; then
+    log "In progress: $in_progress"
+    [[ -n "$updated_at" ]] && log "State updated at: $updated_at"
+  else
+    log "No in-progress state saved"
+  fi
+}
+
+run_apps() {
+  while IFS=$'\t' read -r key app_name delay; do
+    [[ -z "${key:-}" ]] && continue
+    schedule_action "$delay" "app:$key" open_app "$app_name"
+  done < <(helper list-apps "$CONFIG_PATH")
+}
+
+run_urls() {
+  local chrome_profile
+  chrome_profile="$(helper chrome-profile "$CONFIG_PATH")"
+
+  while IFS=$'\t' read -r key url delay; do
+    [[ -z "${key:-}" ]] && continue
+    schedule_action "$delay" "url:$key" open_url "$url" "$chrome_profile"
+  done < <(helper list-urls "$CONFIG_PATH")
+}
+
+run_docker_services() {
+  while IFS=$'\t' read -r kind field_one field_two; do
+    [[ -z "${kind:-}" ]] && continue
+    log "Running docker task"
+    run_docker_service "$kind" "$field_one" "$field_two"
+  done < <(helper list-docker-services "$CONFIG_PATH")
+}
+
+main() {
+  require_helper
+
+  if [[ ! -f "$CONFIG_PATH" ]]; then
+    warn "Config file not found at $CONFIG_PATH"
+    warn "Run ~/.gir/install.sh morning-routine or copy the example config first"
+    exit 1
+  fi
+
+  log "Starting morning routine"
+  show_state
+  check_gir_status
+  run_apps
+  run_urls
+  run_docker_services
+  if ! helper mark-morning-run "$CONFIG_PATH" >/dev/null; then
+    warn "Unable to update last_morning_run_at in $CONFIG_PATH"
+  fi
+  log "Morning routine scheduled"
+}
+
+main "$@"

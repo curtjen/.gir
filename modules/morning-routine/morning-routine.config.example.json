@@ -1,0 +1,24 @@
+{
+  "chrome_profile": "Profile 1",
+  "urls": {
+    "current_doc": "https://docs.google.com/document/d/YOUR_DOC_ID",
+    "task_manager": "https://app.asana.com/0/home",
+    "research_tool": "https://notebooklm.google.com",
+    "email": "https://mail.google.com"
+  },
+  "apps": {
+    "notes": "Notes",
+    "calendar": "Calendar",
+    "slack": "Slack"
+  },
+  "docker_services": [],
+  "delays": {
+    "email": 300,
+    "slack": 600
+  },
+  "state": {
+    "in_progress": "",
+    "updated_at": "",
+    "last_morning_run_at": ""
+  }
+}

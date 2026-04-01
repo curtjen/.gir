@@ -5,19 +5,14 @@ MODULE_DESCRIPTION="Symlink repo skills into ~/.claude/skills/"
 MODULE_PLATFORMS="all"
 
 install_module() {
-  local skills_src="$RCS_DIR/skills"
-  local skills_dst="$HOME/.claude/skills"
+  local sync_script="$RCS_DIR/modules/claude-skills/sync-repo-skills-to-claude.sh"
 
-  if [[ ! -d "$skills_src" ]]; then
-    log_skip "No skills/ directory found in repo"
-    return 0
+  if [[ ! -f "$sync_script" ]]; then
+    log_error "Sync script not found: $sync_script"
+    return 1
   fi
 
-  mkdir -p "$skills_dst"
-
-  for skill_dir in "$skills_src"/*/; do
-    local skill_name
-    skill_name="$(basename "$skill_dir")"
-    rcs_link "$skill_dir" "$skills_dst/$skill_name"
-  done
+  log_info "Syncing repo skills into Claude..."
+  bash "$sync_script"
+  log_ok "Repo skills synced into Claude"
 }

@@ -1,0 +1,28 @@
+{
+  "name": "morning_routine",
+  "version": "1.0.0",
+  "description": "Run a configurable sequence of shell commands as a morning routine",
+  "main": "index.js",
+  "bin": {
+    "morning_routine": "bin/morning_routine.js"
+  },
+  "files": [
+    "bin/",
+    "index.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "morning",
+    "routine",
+    "automation"
+  ],
+  "author": "Curtis Jensen",
+  "license": "ISC",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16"
+  }
+}
